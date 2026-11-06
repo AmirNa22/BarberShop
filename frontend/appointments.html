@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مدیریت نوبت‌ها | Amir Style Studio</title>
+    <!-- پیش‌بارگذاری و واردسازی فونت وزیرمتن -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,7 +21,7 @@
             <p class="subtitle">پنل مدیریت و مشاهده نوبت‌های روزانه (ویژه صاحب‌کار)</p>
             <div class="header-nav">
                 <a href="index.html" class="nav-link">← بازگشت به صفحه اصلی</a>
-                <span style="color: #475569; margin: 0 8px;">|</span>
+                <span class="nav-divider">|</span>
                 <a href="booking.html" class="nav-link">+ ثبت نوبت جدید</a>
             </div>
         </header>
@@ -37,8 +41,8 @@
                 <!-- آمار مختصر روز -->
                 <div id="stats-container" class="appointments-stats">
                     <div class="stat-pill">مجموع نوبت‌ها: <strong id="total-count">۰</strong></div>
-                    <div class="stat-pill">فعال: <strong id="active-count" style="color: #34d399;">۰</strong></div>
-                    <div class="stat-pill">لغو شده: <strong id="cancelled-count" style="color: #f87171;">۰</strong></div>
+                    <div class="stat-pill">فعال: <strong id="active-count" style="color: var(--neon-green-light);">۰</strong></div>
+                    <div class="stat-pill">لغو شده: <strong id="cancelled-count" style="color: var(--alert-red-light);">۰</strong></div>
                 </div>
             </section>
 

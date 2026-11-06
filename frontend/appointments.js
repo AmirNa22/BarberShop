@@ -125,7 +125,7 @@ function renderAppointments(appointments) {
             : '<span class="badge-status badge-cancelled">لغو شده</span>';
 
         // دکمه لغو نوبت فقط برای نوبت‌های فعال
-        let actionCell = '<span style="color: #64748b; font-size: 0.85rem;">-</span>';
+        let actionCell = '<span style="color: var(--text-muted); font-size: 0.85rem;">-</span>';
         if (isActive) {
             actionCell = `
                 <button class="btn-cancel" data-id="${app.id}" data-time="${escapeHtml(app.time)}" data-name="${escapeHtml(app.name)}">
