@@ -126,9 +126,19 @@ function setupFormSubmit() {
         e.preventDefault();
         errorBox.style.display = 'none';
 
+        const nameInput = document.getElementById('customer-name');
+        const phoneInput = document.getElementById('customer-phone');
+
+        let rawPhone = phoneInput.value.trim();
+        // نرمال‌سازی ارقام فارسی و عربی به ارقام انگلیسی
+        let phone = rawPhone
+            .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+            .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+        let name = nameInput.value.trim();
+
         const payload = {
-            name: document.getElementById('customer-name').value.trim(),
-            phone: document.getElementById('customer-phone').value.trim(),
+            name: name,
+            phone: phone,
             service_name: document.getElementById('service-select').value,
             date: document.getElementById('date-input').value,
             time: document.getElementById('time-select').value
@@ -137,6 +147,30 @@ function setupFormSubmit() {
         if (!payload.name || !payload.phone || !payload.service_name || !payload.date || !payload.time) {
             errorBox.textContent = 'لطفاً تمامی فیلدها را با دقت پر کنید.';
             errorBox.style.display = 'block';
+            return;
+        }
+
+        // بررسی طول نام
+        if (payload.name.length > 50) {
+            errorBox.textContent = '⚠️ نام و نام خانوادگی نباید بیشتر از ۵۰ کاراکتر باشد.';
+            errorBox.style.display = 'block';
+            nameInput.focus();
+            return;
+        }
+
+        if (payload.name.length < 2) {
+            errorBox.textContent = '⚠️ نام و نام خانوادگی باید حداقل دارای ۲ کاراکتر باشد.';
+            errorBox.style.display = 'block';
+            nameInput.focus();
+            return;
+        }
+
+        // بررسی فرمت شماره موبایل معتبر ایران (۱۱ رقم، شروع با 09)
+        const irPhoneRegex = /^09\d{9}$/;
+        if (!irPhoneRegex.test(payload.phone)) {
+            errorBox.textContent = '⚠️ شماره موبایل نامعتبر است. شماره باید ۱۱ رقم بوده و با ۰۹ شروع شود (مثال: 09123456789).';
+            errorBox.style.display = 'block';
+            phoneInput.focus();
             return;
         }
 

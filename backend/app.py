@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 from datetime import datetime
 
 # افزودن مسیر پوشه backend به sys.path جهت امکان اجرای منعطف
@@ -23,6 +24,16 @@ VALID_SLOTS = [
     "16:00", "16:30", "17:00", "17:30",
     "18:00", "18:30", "19:00", "19:30"
 ]
+
+def normalize_digits(text: str) -> str:
+    """تبدیل ارقام فارسی و عربی به ارقام انگلیسی"""
+    if not text:
+        return ""
+    persian_digits = '۰۱۲۳۴۵۶۷۸۹'
+    arabic_digits = '٠١٢٣٤٥٦٧٨٩'
+    for i in range(10):
+        text = text.replace(persian_digits[i], str(i)).replace(arabic_digits[i], str(i))
+    return text
 
 # مقداردهی اولیه پایگاه‌داده
 init_db()
@@ -74,6 +85,27 @@ def create_appointment():
             return jsonify({
                 "status": "error",
                 "message": "لطفاً تمامی فیلدها (نام، شماره تماس، خدمت، تاریخ و ساعت) را تکمیل فرمایید."
+            }), 400
+
+        # اعتبارسنجی طول نام (حداکثر ۵۰ کاراکتر)
+        if len(name) > 50:
+            return jsonify({
+                "status": "error",
+                "message": "نام و نام خانوادگی نباید بیشتر از ۵۰ کاراکتر باشد."
+            }), 400
+
+        if len(name) < 2:
+            return jsonify({
+                "status": "error",
+                "message": "نام و نام خانوادگی باید حداقل دارای ۲ کاراکتر باشد."
+            }), 400
+
+        # نرمال‌سازی ارقام و اعتبارسنجی قطعی شماره موبایل ایران (۱۱ رقم با پیش‌شماره 09)
+        phone = normalize_digits(phone)
+        if not re.match(r'^09\d{9}$', phone):
+            return jsonify({
+                "status": "error",
+                "message": "شماره موبایل نامعتبر است. شماره باید ۱۱ رقم بوده و با ۰۹ شروع شود (مثال: 09123456789)."
             }), 400
 
         # بررسی قانون R1: ساعات مجاز و بازه‌های ۳۰ دقیقه‌ای

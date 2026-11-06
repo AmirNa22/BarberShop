@@ -136,7 +136,7 @@ function renderAppointments(appointments) {
 
         tr.innerHTML = `
             <td><span class="time-cell">${escapeHtml(app.time)}</span></td>
-            <td><strong>${escapeHtml(app.name)}</strong></td>
+            <td class="customer-name-cell"><strong>${escapeHtml(app.name)}</strong></td>
             <td><span dir="ltr">${escapeHtml(app.phone)}</span></td>
             <td>${escapeHtml(app.service_name)}</td>
             <td>${statusBadge}</td>

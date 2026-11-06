@@ -41,13 +41,13 @@
                     <!-- نام مشتری -->
                     <div class="form-group">
                         <label for="customer-name">نام و نام خانوادگی:</label>
-                        <input type="text" id="customer-name" name="name" required placeholder="مثال: علی احمدی">
+                        <input type="text" id="customer-name" name="name" required maxlength="50" placeholder="مثال: علی احمدی">
                     </div>
 
                     <!-- شماره موبایل -->
                     <div class="form-group">
                         <label for="customer-phone">شماره موبایل:</label>
-                        <input type="tel" id="customer-phone" name="phone" required placeholder="مثال: 09123456789" dir="ltr">
+                        <input type="tel" id="customer-phone" name="phone" required maxlength="11" pattern="09[0-9]{9}" title="شماره موبایل باید ۱۱ رقم بوده و با ۰۹ شروع شود (مثال: 09123456789)" placeholder="مثال: 09123456789" dir="ltr">
                     </div>
 
                     <!-- انتخاب خدمت -->
