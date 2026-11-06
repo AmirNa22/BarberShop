@@ -9,12 +9,14 @@
 ```text
 BarberShop/
 ├── backend/            # کدهای سرور (Python + Flask)
-│   ├── app.py          # فایل اصلی سرور فلسک
+│   ├── app.py          # فایل اصلی سرور فلسک و اندپوینت‌ها
+│   ├── database.py     # مدیریت پایگاه‌داده SQLite و ساخت جداول
+│   ├── barbershop.db   # فایل پایگاه‌داده محلی SQLite
 │   └── requirements.txt# پکیج‌های پایتون مورد نیاز
 ├── frontend/           # رابط کاربری (HTML, CSS, JS خام)
-│   ├── index.html      # صفحه اصلی
-│   ├── style.css       # استایل‌ها
-│   └── app.js          # کدهای تعامل و ارتباط با API
+│   ├── index.html      # صفحه اصلی (Amir Style Studio و کارت‌های خدمات)
+│   ├── style.css       # استایل‌ها و طراحی کارت‌ها
+│   └── app.js          # دریافت و رندر خدمات از سرور
 ├── docs/
 │   └── PRD.md          # سند نیازمندی‌های محصول
 ├── AGENTS.md           # قوانین توسعه و کاری پروژه

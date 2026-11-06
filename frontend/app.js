@@ -1,46 +1,91 @@
 const API_BASE_URL = 'http://127.0.0.1:5000';
 
-async function fetchStatus() {
-    const statusBox = document.getElementById('status-box');
-    const statusMessage = document.getElementById('status-message');
-    const retryBtn = document.getElementById('retry-btn');
-    const icon = statusBox.querySelector('.icon');
+// تبدیل اعداد به فرمت سه‌رقم‌سه‌رقم فارسی
+function formatPrice(price) {
+    return Number(price).toLocaleString('fa-IR') + ' تومان';
+}
 
-    // تنظیم حالت در حال بارگذاری
-    statusBox.className = 'status-box loading';
-    icon.textContent = '⏳';
-    statusMessage.textContent = 'در حال ارتباط با بک‌اند...';
-    retryBtn.style.display = 'none';
+// تبدیل اعداد به ارقام فارسی
+function toPersianDigits(num) {
+    return num.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+}
+
+// بررسی وضعیت ارتباط با سرور
+async function checkServerStatus() {
+    const statusBar = document.getElementById('status-bar');
+    const statusText = document.getElementById('status-text');
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/test`);
-        
-        if (!response.ok) {
-            throw new Error(`خطای سرور: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error('خطا در پاسخ سرور');
         const data = await response.json();
-        
-        // نمایش پیام دریافتی از سرور
-        statusBox.className = 'status-box success';
-        icon.textContent = '✅';
-        statusMessage.textContent = data.message;
-    } catch (error) {
-        // مدیریت خطا در صورت در دسترس نبودن سرور
-        statusBox.className = 'status-box error';
-        icon.textContent = '❌';
-        statusMessage.textContent = 'خطا در ارتباط با بک‌اند! آیا سرور روشن است؟';
-        retryBtn.style.display = 'inline-block';
-        console.error('Fetch error:', error);
+
+        statusBar.className = 'status-bar success';
+        statusText.textContent = data.message || 'ارتباط با سرور برقرار است';
+        return true;
+    } catch (err) {
+        statusBar.className = 'status-bar error';
+        statusText.textContent = 'خطا در اتصال به سرور بک‌اند (پورت ۵۰۰۰)';
+        return false;
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchStatus();
+// دریافت و نمایش خدمات
+async function loadServices() {
+    const loadingElem = document.getElementById('services-loading');
+    const errorElem = document.getElementById('services-error');
+    const gridElem = document.getElementById('services-grid');
 
-    const retryBtn = document.getElementById('retry-btn');
+    loadingElem.style.display = 'block';
+    errorElem.style.display = 'none';
+    gridElem.style.display = 'none';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/services`);
+        if (!response.ok) {
+            throw new Error(`خطای دریافت خدمات: ${response.status}`);
+        }
+
+        const services = await response.json();
+
+        // پاکسازی کارت‌های قبلی
+        gridElem.innerHTML = '';
+
+        services.forEach(service => {
+            const card = document.createElement('div');
+            card.className = 'service-card';
+            card.innerHTML = `
+                <div class="service-card-top">
+                    <h3 class="service-name">${service.name}</h3>
+                    <span class="service-duration">⏱ ${toPersianDigits(service.duration)} دقیقه</span>
+                </div>
+                <div class="service-card-bottom">
+                    <span class="service-price-label">هزینه خدمت:</span>
+                    <span class="service-price">${formatPrice(service.price)}</span>
+                </div>
+            `;
+            gridElem.appendChild(card);
+        });
+
+        loadingElem.style.display = 'none';
+        gridElem.style.display = 'grid';
+    } catch (err) {
+        console.error('Error fetching services:', err);
+        loadingElem.style.display = 'none';
+        errorElem.style.display = 'block';
+    }
+}
+
+// راه‌اندازی اولیه صفحه
+document.addEventListener('DOMContentLoaded', () => {
+    checkServerStatus();
+    loadServices();
+
+    const retryBtn = document.getElementById('retry-services-btn');
     if (retryBtn) {
-        retryBtn.addEventListener('click', fetchStatus);
+        retryBtn.addEventListener('click', () => {
+            checkServerStatus();
+            loadServices();
+        });
     }
 });
-

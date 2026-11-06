@@ -5,99 +5,242 @@
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background-color: #f3f4f6;
-    color: #1f2937;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #0f172a;
+    color: #f1f5f9;
     min-height: 100vh;
+    padding: 24px 16px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 20px;
 }
 
 .container {
     width: 100%;
-    max-width: 500px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-}
-
-header {
+    max-width: 850px;
     background: #1e293b;
-    color: #ffffff;
-    padding: 24px;
-    text-align: center;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
 }
 
-header h1 {
-    font-size: 1.5rem;
+/* هدر */
+.header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    padding: 32px 24px;
+    text-align: center;
+    border-bottom: 1px solid #334155;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.logo-icon {
+    font-size: 2.2rem;
+}
+
+.header h1 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.5px;
+}
+
+.header .subtitle {
+    font-size: 0.95rem;
+    color: #94a3b8;
+}
+
+/* نوار وضعیت سرور */
+.status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    background: #0f172a;
+    border-bottom: 1px solid #334155;
+    transition: all 0.3s ease;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-bar.loading .status-indicator {
+    background-color: #f59e0b;
+}
+
+.status-bar.success {
+    background-color: #064e3b;
+    color: #a7f3d0;
+}
+.status-bar.success .status-indicator {
+    background-color: #10b981;
+}
+
+.status-bar.error {
+    background-color: #7f1d1d;
+    color: #fecaca;
+}
+.status-bar.error .status-indicator {
+    background-color: #ef4444;
+}
+
+/* بخش اصلی */
+.main-content {
+    padding: 28px 24px;
+    flex: 1;
+}
+
+.section-header {
+    margin-bottom: 24px;
+    text-align: right;
+}
+
+.section-header h2 {
+    font-size: 1.35rem;
+    color: #f8fafc;
     margin-bottom: 6px;
 }
 
-header .subtitle {
+.section-header p {
     font-size: 0.9rem;
     color: #94a3b8;
 }
 
-main {
-    padding: 24px;
-}
-
-.card {
+/* پیام‌های وضعیت (لودینگ و خطا) */
+.state-message {
     text-align: center;
+    padding: 40px 16px;
+    background: #0f172a;
+    border-radius: 12px;
+    border: 1px dashed #334155;
+    color: #94a3b8;
 }
 
-.card h2 {
-    font-size: 1.1rem;
-    margin-bottom: 16px;
-    color: #374151;
+.state-message.error {
+    border-color: #ef4444;
+    color: #fca5a5;
 }
 
-.status-box {
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #38bdf8;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 12px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* شبکه کارت‌های خدمات */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.service-card {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 16px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-3px);
+    border-color: #38bdf8;
+    box-shadow: 0 6px 18px rgba(56, 189, 248, 0.15);
+}
+
+.service-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     margin-bottom: 16px;
-    transition: all 0.3s ease;
 }
 
-.status-box.loading {
-    background-color: #fef3c7;
-    color: #92400e;
-    border: 1px solid #fde68a;
+.service-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f1f5f9;
 }
 
-.status-box.success {
-    background-color: #d1fae5;
-    color: #065f46;
-    border: 1px solid #a7f3d0;
+.service-duration {
+    background: #1e293b;
+    border: 1px solid #475569;
+    color: #38bdf8;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
 }
 
-.status-box.error {
-    background-color: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fecaca;
+.service-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #1e293b;
+    padding-top: 14px;
+}
+
+.service-price-label {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.service-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #10b981;
 }
 
 .btn {
-    background-color: #2563eb;
-    color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 500;
+    transition: background-color 0.2s ease;
 }
 
-.btn:hover {
-    background-color: #1d4ed8;
+.btn-secondary {
+    background-color: #334155;
+    color: #f8fafc;
+    margin-top: 12px;
 }
 
+.btn-secondary:hover {
+    background-color: #475569;
+}
+
+/* فوتر */
+.footer {
+    padding: 16px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #64748b;
+    border-top: 1px solid #334155;
+}

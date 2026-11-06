@@ -3,29 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سیستم نوبت‌دهی آرایشگاه</title>
+    <title>Amir Style Studio | سامانه نوبت‌دهی آنلاین</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>سامانه نوبت‌دهی آرایشگاه</h1>
-            <p class="subtitle">بررسی اتصال فرانت‌اند و بک‌اند</p>
+        <!-- هدر و معرفی آرایشگاه -->
+        <header class="header">
+            <div class="logo-area">
+                <span class="logo-icon">💈</span>
+                <h1>Amir Style Studio</h1>
+            </div>
+            <p class="subtitle">خدمات تخصصی اصلاح و پیرایش آقایان</p>
         </header>
 
-        <main>
-            <div class="card">
-                <h2>وضعیت ارتباط با سرور</h2>
-                <div id="status-box" class="status-box loading">
-                    <span class="icon">⏳</span>
-                    <span id="status-message">در حال دریافت پاسخ از سرور...</span>
+        <!-- وضعیت ارتباط با سرور -->
+        <div id="status-bar" class="status-bar loading">
+            <span class="status-indicator"></span>
+            <span id="status-text">در حال بررسی اتصال به سرور...</span>
+        </div>
+
+        <main class="main-content">
+            <!-- بخش خدمات -->
+            <section class="services-section">
+                <div class="section-header">
+                    <h2>لیست خدمات و تعرفه‌ها</h2>
+                    <p>یکی از خدمات زیر را برای مشاهده و رزرو انتخاب کنید:</p>
                 </div>
-                <button id="retry-btn" class="btn" style="display: none;">تلاش مجدد</button>
-            </div>
+
+                <!-- نمایش وضعیت بارگذاری خدمات -->
+                <div id="services-loading" class="state-message">
+                    <div class="spinner"></div>
+                    <p>در حال بارگذاری خدمات از سرور...</p>
+                </div>
+
+                <!-- پیام خطا در صورت عدم برقراری ارتباط -->
+                <div id="services-error" class="state-message error" style="display: none;">
+                    <p>⚠️ خطا در دریافت خدمات از سرور. لطفاً از روشن بودن بک‌اند اطمینان حاصل کنید.</p>
+                    <button id="retry-services-btn" class="btn btn-secondary">تلاش مجدد</button>
+                </div>
+
+                <!-- شبکه نمایش کارت‌های خدمات -->
+                <div id="services-grid" class="services-grid" style="display: none;"></div>
+            </section>
         </main>
+
+        <footer class="footer">
+            <p>© ۱۴۰۳ Amir Style Studio - سیستم نوبت‌دهی محلی</p>
+        </footer>
     </div>
 
     <script src="app.js"></script>
 </body>
 </html>
-
