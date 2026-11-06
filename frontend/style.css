@@ -1,0 +1,103 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f3f4f6;
+    color: #1f2937;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+header {
+    background: #1e293b;
+    color: #ffffff;
+    padding: 24px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+}
+
+header .subtitle {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+main {
+    padding: 24px;
+}
+
+.card {
+    text-align: center;
+}
+
+.card h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: #374151;
+}
+
+.status-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+}
+
+.status-box.loading {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.status-box.success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.status-box.error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.btn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.btn:hover {
+    background-color: #1d4ed8;
+}
+
