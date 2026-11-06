@@ -474,3 +474,175 @@ body {
     color: #64748b;
     border-top: 1px solid #334155;
 }
+
+/* بخش مدیریت نوبت‌ها (صاحب‌کار) */
+.filter-card {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.filter-input-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-input-group label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    white-space: nowrap;
+}
+
+.date-input-control {
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #f8fafc;
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.date-input-control:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.appointments-stats {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.stat-pill {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+}
+
+.stat-pill strong {
+    color: #f8fafc;
+    margin-right: 4px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    background: #0f172a;
+}
+
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+    font-size: 0.92rem;
+}
+
+.appointments-table th {
+    background: #1e293b;
+    color: #94a3b8;
+    font-weight: 600;
+    padding: 14px 16px;
+    border-bottom: 1px solid #334155;
+    white-space: nowrap;
+}
+
+.appointments-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #1e293b;
+    color: #f1f5f9;
+    vertical-align: middle;
+}
+
+.appointments-table tr:last-child td {
+    border-bottom: none;
+}
+
+.appointments-table tr:hover td {
+    background: rgba(30, 41, 59, 0.4);
+}
+
+.time-cell {
+    font-weight: 700;
+    color: #38bdf8;
+    direction: ltr;
+    display: inline-block;
+}
+
+.badge-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-cancelled {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background-color: #b91c1c;
+}
+
+.btn-cancel {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    border: 1px solid #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.btn-cancel:hover {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.btn-cancel:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.alert-success {
+    background-color: #064e3b;
+    border: 1px solid #10b981;
+    color: #a7f3d0;
+}
+

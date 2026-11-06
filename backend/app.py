@@ -171,5 +171,90 @@ def get_available_slots():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+@app.route('/api/appointments', methods=['GET'])
+def get_appointments():
+    """دریافت نوبت‌های یک تاریخ مشخص به ترتیب ساعت (ویژه صاحب‌کار)"""
+    date_str = request.args.get('date', '').strip()
+    if not date_str:
+        return jsonify({
+            "status": "error",
+            "message": "پارامتر date برای دریافت نوبت‌ها الزامی است (فرمت: YYYY-MM-DD)."
+        }), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            '''
+            SELECT id, name, phone, service_name, date, time, status, created_at
+            FROM appointments
+            WHERE date = ?
+            ORDER BY time ASC
+            ''',
+            (date_str,)
+        )
+        rows = cursor.fetchall()
+        conn.close()
+
+        appointments = [
+            {
+                "id": row["id"],
+                "name": row["name"],
+                "phone": row["phone"],
+                "service_name": row["service_name"],
+                "date": row["date"],
+                "time": row["time"],
+                "status": row["status"],
+                "created_at": row["created_at"]
+            }
+            for row in rows
+        ]
+        return jsonify(appointments), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"خطای سرور: {str(e)}"}), 500
+
+@app.route('/api/appointments/<int:appointment_id>/cancel', methods=['POST', 'PUT'])
+def cancel_appointment(appointment_id):
+    """لغو نوبت بر اساس قانون R4: تغییر وضعیت به 'cancelled' بدون حذف فیزیکی رکورد"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # بررسی وجود نوبت
+        cursor.execute("SELECT id, status, date, time FROM appointments WHERE id = ?", (appointment_id,))
+        appointment = cursor.fetchone()
+
+        if not appointment:
+            conn.close()
+            return jsonify({
+                "status": "error",
+                "message": "نوبت مورد نظر یافت نشد."
+            }), 404
+
+        if appointment["status"] == "cancelled":
+            conn.close()
+            return jsonify({
+                "status": "error",
+                "message": "این نوبت قبلاً لغو شده است."
+            }), 400
+
+        # تغییر وضعیت به لغو شده
+        cursor.execute(
+            "UPDATE appointments SET status = 'cancelled' WHERE id = ?",
+            (appointment_id,)
+        )
+        conn.commit()
+        conn.close()
+
+        return jsonify({
+            "status": "success",
+            "message": "نوبت با موفقیت لغو شد و بازه زمانی مجدداً آزاد گردید.",
+            "appointment_id": appointment_id,
+            "status_code": "cancelled"
+        }), 200
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"خطای سرور: {str(e)}"}), 500
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)

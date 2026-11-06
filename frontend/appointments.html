@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت نوبت‌ها | Amir Style Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- هدر پنل صاحب‌کار -->
+        <header class="header">
+            <div class="logo-area">
+                <span class="logo-icon">💈</span>
+                <h1>Amir Style Studio</h1>
+            </div>
+            <p class="subtitle">پنل مدیریت و مشاهده نوبت‌های روزانه (ویژه صاحب‌کار)</p>
+            <div class="header-nav">
+                <a href="index.html" class="nav-link">← بازگشت به صفحه اصلی</a>
+                <span style="color: #475569; margin: 0 8px;">|</span>
+                <a href="booking.html" class="nav-link">+ ثبت نوبت جدید</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- پیام‌های اعلان و خطا -->
+            <div id="alert-box" class="alert-box" style="display: none;"></div>
+
+            <!-- بخش فیلتر بر اساس تاریخ -->
+            <section class="filter-card">
+                <div class="filter-input-group">
+                    <label for="date-picker">📅 انتخاب تاریخ:</label>
+                    <input type="date" id="date-picker" class="date-input-control">
+                    <button id="today-btn" class="btn btn-secondary btn-sm" type="button">امروز</button>
+                </div>
+
+                <!-- آمار مختصر روز -->
+                <div id="stats-container" class="appointments-stats">
+                    <div class="stat-pill">مجموع نوبت‌ها: <strong id="total-count">۰</strong></div>
+                    <div class="stat-pill">فعال: <strong id="active-count" style="color: #34d399;">۰</strong></div>
+                    <div class="stat-pill">لغو شده: <strong id="cancelled-count" style="color: #f87171;">۰</strong></div>
+                </div>
+            </section>
+
+            <!-- بخش نمایش نوبت‌ها -->
+            <section class="appointments-section">
+                <!-- حالت در حال بارگذاری -->
+                <div id="loading-state" class="state-message">
+                    <div class="spinner"></div>
+                    <p>در حال دریافت فهرست نوبت‌ها از سرور...</p>
+                </div>
+
+                <!-- حالت خطای سرور -->
+                <div id="error-state" class="state-message error" style="display: none;">
+                    <p id="error-message">⚠️ خطا در دریافت اطلاعات از سرور.</p>
+                    <button id="retry-btn" class="btn btn-secondary btn-sm" style="margin-top: 10px;">تلاش مجدد</button>
+                </div>
+
+                <!-- حالت لیست خالی -->
+                <div id="empty-state" class="state-message" style="display: none;">
+                    <span style="font-size: 2rem; display: block; margin-bottom: 8px;">📭</span>
+                    <p>هیچ نوبتی برای این تاریخ ثبت نشده است.</p>
+                </div>
+
+                <!-- جدول نوبت‌ها -->
+                <div id="table-container" class="table-responsive" style="display: none;">
+                    <table class="appointments-table">
+                        <thead>
+                            <tr>
+                                <th>ساعت</th>
+                                <th>نام مشتری</th>
+                                <th>شماره موبایل</th>
+                                <th>نوع خدمت</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointments-tbody">
+                            <!-- ردیف‌های نوبت با جاوااسکریپت در اینجا رندر می‌شوند -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>© ۱۴۰۳ Amir Style Studio - پنل نوبت‌های صاحب‌کار</p>
+        </footer>
+    </div>
+
+    <script src="appointments.js"></script>
+</body>
+</html>
+
