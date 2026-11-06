@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رزرو نوبت آنلاین | Amir Style Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- هدر صفحه رزرو -->
+        <header class="header">
+            <div class="logo-area">
+                <span class="logo-icon">💈</span>
+                <h1>Amir Style Studio</h1>
+            </div>
+            <p class="subtitle">فرم ثبت نوبت آنلاین</p>
+            <div class="header-nav">
+                <a href="index.html" class="nav-link">← بازگشت به صفحه اصلی</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- کارت فرم رزرو -->
+            <section id="booking-section" class="form-card">
+                <div class="section-header">
+                    <h2>مشخصات نوبت</h2>
+                    <p>لطفاً اطلاعات زیر را با دقت تکمیل کنید (ساعات کاری: ۱۰:۰۰ الی ۲۰:۰۰)</p>
+                </div>
+
+                <!-- پیام خطا -->
+                <div id="form-error" class="alert-box alert-error" style="display: none;"></div>
+
+                <form id="booking-form" class="booking-form">
+                    <!-- نام مشتری -->
+                    <div class="form-group">
+                        <label for="customer-name">نام و نام خانوادگی:</label>
+                        <input type="text" id="customer-name" name="name" required placeholder="مثال: علی احمدی">
+                    </div>
+
+                    <!-- شماره موبایل -->
+                    <div class="form-group">
+                        <label for="customer-phone">شماره موبایل:</label>
+                        <input type="tel" id="customer-phone" name="phone" required placeholder="مثال: 09123456789" dir="ltr">
+                    </div>
+
+                    <!-- انتخاب خدمت -->
+                    <div class="form-group">
+                        <label for="service-select">نوع خدمت:</label>
+                        <select id="service-select" name="service_name" required>
+                            <option value="">در حال دریافت لیست خدمات...</option>
+                        </select>
+                    </div>
+
+                    <!-- تاریخ نوبت -->
+                    <div class="form-group">
+                        <label for="date-input">تاریخ نوبت:</label>
+                        <input type="date" id="date-input" name="date" required>
+                    </div>
+
+                    <!-- ساعت نوبت (قانون R1) -->
+                    <div class="form-group">
+                        <label for="time-select">ساعت نوبت (اسلات‌های ۳۰ دقیقه‌ای):</label>
+                        <select id="time-select" name="time" required>
+                            <option value="">ابتدا تاریخ را انتخاب کنید</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn btn-primary btn-block">
+                        <span id="btn-text">ثبت نهایی نوبت</span>
+                        <span id="btn-spinner" class="spinner-small" style="display: none;"></span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- کارت تأییدیه و خلاصه نوبت (پس از ثبت موفق) -->
+            <section id="confirmation-section" class="confirmation-card" style="display: none;">
+                <div class="confirmation-header">
+                    <span class="confirmation-icon">🎉</span>
+                    <h2>نوبت شما با موفقیت ثبت شد!</h2>
+                    <p>خلاصه مشخصات نوبت رزرو شده به شرح زیر است:</p>
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-item">
+                        <span class="summary-label">کد رهگیری نوبت:</span>
+                        <span id="summary-id" class="summary-value badge">#</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">نام مشتری:</span>
+                        <span id="summary-name" class="summary-value">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">شماره موبایل:</span>
+                        <span id="summary-phone" class="summary-value" dir="ltr">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">نوع خدمت:</span>
+                        <span id="summary-service" class="summary-value">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">تاریخ رزرو:</span>
+                        <span id="summary-date" class="summary-value">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">ساعت حضور:</span>
+                        <span id="summary-time" class="summary-value highlight">-</span>
+                    </div>
+                </div>
+
+                <div class="confirmation-actions">
+                    <button id="book-another-btn" class="btn btn-secondary">ثبت یک نوبت دیگر</button>
+                    <a href="index.html" class="btn btn-primary">بازگشت به صفحه اصلی</a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>© ۱۴۰۳ Amir Style Studio - سیستم نوبت‌دهی محلی</p>
+        </footer>
+    </div>
+
+    <script src="booking.js"></script>
+</body>
+</html>
+

@@ -24,6 +24,20 @@ def init_db():
         )
     ''')
 
+    # ایجاد جدول نوبت‌ها
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS appointments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            service_name TEXT NOT NULL,
+            date TEXT NOT NULL,
+            time TEXT NOT NULL,
+            status TEXT DEFAULT 'active',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
     # بررسی وجود خدمات اولیه
     cursor.execute('SELECT COUNT(*) FROM services')
     count = cursor.fetchone()[0]

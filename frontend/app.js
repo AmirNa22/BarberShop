@@ -60,8 +60,11 @@ async function loadServices() {
                     <span class="service-duration">⏱ ${toPersianDigits(service.duration)} دقیقه</span>
                 </div>
                 <div class="service-card-bottom">
-                    <span class="service-price-label">هزینه خدمت:</span>
-                    <span class="service-price">${formatPrice(service.price)}</span>
+                    <div>
+                        <span class="service-price-label">هزینه خدمت:</span>
+                        <div class="service-price">${formatPrice(service.price)}</div>
+                    </div>
+                    <a href="booking.html?service=${encodeURIComponent(service.name)}" class="btn btn-sm btn-service-book">رزرو نوبت ←</a>
                 </div>
             `;
             gridElem.appendChild(card);
