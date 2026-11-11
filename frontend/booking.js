@@ -70,43 +70,78 @@ function setupDatePicker() {
     });
 }
 
-// دریافت اسلات‌های آزاد برای تاریخ انتخابی
+// دریافت و نمایش اسلات‌های زمانی به صورت دکمه‌های مستقیم در دسترس (بدون منوی کشویی)
 async function loadAvailableSlots(dateStr) {
-    const timeSelect = document.getElementById('time-select');
+    const slotsContainer = document.getElementById('slots-container');
+    const timeInput = document.getElementById('time-input');
+    const previewBox = document.getElementById('selected-slot-preview');
+    const previewTime = document.getElementById('selected-slot-time');
+
+    // ریست انتخاب قبلی
+    timeInput.value = '';
+    if (previewBox) previewBox.style.display = 'none';
+
     if (!dateStr) {
-        timeSelect.innerHTML = '<option value="">ابتدا تاریخ را انتخاب کنید</option>';
+        slotsContainer.innerHTML = '<div class="slots-empty-notice">ابتدا تاریخ را انتخاب فرمایید.</div>';
         return;
     }
 
-    timeSelect.innerHTML = '<option value="">در حال بررسی بازه‌های آزاد...</option>';
+    slotsContainer.innerHTML = '<div class="slots-loading">در حال بررسی ساعت‌های آزاد...</div>';
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/available-slots?date=${encodeURIComponent(dateStr)}`);
-        if (!response.ok) throw new Error('خطا در دریافت اسلات‌ها');
+        if (!response.ok) throw new Error('خطا در دریافت وضعیت اسلات‌ها');
         const data = await response.json();
 
-        timeSelect.innerHTML = '<option value="">-- انتخاب ساعت --</option>';
-        
+        slotsContainer.innerHTML = '';
+        let availableCount = 0;
+
         data.slots.forEach(slot => {
-            const option = document.createElement('option');
-            option.value = slot.time;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'slot-btn';
+            btn.setAttribute('data-time', slot.time);
+
             if (slot.available) {
-                option.textContent = `${toPersianDigits(slot.time)} (آزاد)`;
+                availableCount++;
+                btn.innerHTML = `<span class="slot-time">${toPersianDigits(slot.time)}</span><span class="slot-badge-free">آزاد</span>`;
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    timeInput.value = slot.time;
+                    previewTime.textContent = toPersianDigits(slot.time);
+                    if (previewBox) previewBox.style.display = 'flex';
+                });
             } else {
-                option.textContent = `${toPersianDigits(slot.time)} (پر شده)`;
-                option.disabled = true;
+                btn.classList.add('disabled');
+                btn.disabled = true;
+                btn.innerHTML = `<span class="slot-time">${toPersianDigits(slot.time)}</span><span class="slot-badge-taken">پر شده</span>`;
             }
-            timeSelect.appendChild(option);
+
+            slotsContainer.appendChild(btn);
         });
+
+        if (availableCount === 0) {
+            slotsContainer.innerHTML = '<div class="slots-empty-notice">متأسفانه برای این تاریخ تمامی نوبت‌ها رزرو شده است. لطفاً تاریخ دیگری را انتخاب فرمایید.</div>';
+        }
+
     } catch (err) {
         console.error('Error loading slots:', err);
-        // اگر API اسلات در دسترس نبود، گزینه‌های پیش‌فرض را نشان بده
-        timeSelect.innerHTML = '<option value="">-- انتخاب ساعت --</option>';
+        slotsContainer.innerHTML = '';
         DEFAULT_SLOTS.forEach(time => {
-            const option = document.createElement('option');
-            option.value = time;
-            option.textContent = toPersianDigits(time);
-            timeSelect.appendChild(option);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'slot-btn';
+            btn.setAttribute('data-time', time);
+            btn.innerHTML = `<span class="slot-time">${toPersianDigits(time)}</span><span class="slot-badge-free">انتخاب</span>`;
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                timeInput.value = time;
+                previewTime.textContent = toPersianDigits(time);
+                if (previewBox) previewBox.style.display = 'flex';
+            });
+            slotsContainer.appendChild(btn);
         });
     }
 }
@@ -141,12 +176,19 @@ function setupFormSubmit() {
             phone: phone,
             service_name: document.getElementById('service-select').value,
             date: document.getElementById('date-input').value,
-            time: document.getElementById('time-select').value
+            time: (document.getElementById('time-input').value || '').trim()
         };
 
-        if (!payload.name || !payload.phone || !payload.service_name || !payload.date || !payload.time) {
-            errorBox.textContent = 'لطفاً تمامی فیلدها را با دقت پر کنید.';
+        if (!payload.name || !payload.phone || !payload.service_name || !payload.date) {
+            errorBox.textContent = 'لطفاً تمامی فیلدهای نام، شماره تماس، نوع خدمت و تاریخ را تکمیل فرمایید.';
             errorBox.style.display = 'block';
+            return;
+        }
+
+        if (!payload.time) {
+            errorBox.textContent = '⚠️ لطفاً یکی از ساعت‌های آزاد را از بین گزینه‌ها انتخاب فرمایید.';
+            errorBox.style.display = 'block';
+            document.getElementById('slots-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             return;
         }
 
@@ -225,6 +267,10 @@ function setupFormSubmit() {
     // دکمه ثبت نوبت دیگر
     document.getElementById('book-another-btn').addEventListener('click', () => {
         form.reset();
+        const timeInput = document.getElementById('time-input');
+        if (timeInput) timeInput.value = '';
+        const previewBox = document.getElementById('selected-slot-preview');
+        if (previewBox) previewBox.style.display = 'none';
         setupDatePicker();
         confirmationSection.style.display = 'none';
         bookingSection.style.display = 'block';

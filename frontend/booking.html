@@ -58,18 +58,25 @@
                         </select>
                     </div>
 
-                    <!-- تاریخ نوبت -->
+                    <!-- پنل انتخاب تاریخ و روز -->
                     <div class="form-group">
-                        <label for="date-input">تاریخ نوبت:</label>
-                        <input type="date" id="date-input" name="date" required>
+                        <label for="date-input">تاریخ و روز حضور:</label>
+                        <div class="date-picker-card">
+                            <input type="date" id="date-input" name="date" required>
+                            <span class="date-picker-hint">📅 روز مورد نظر خود را انتخاب فرمایید</span>
+                        </div>
                     </div>
 
-                    <!-- ساعت نوبت (قانون R1) -->
+                    <!-- انتخاب ساعت نوبت (اسلات‌های مستقیم بدون کشویی) -->
                     <div class="form-group">
-                        <label for="time-select">ساعت نوبت (اسلات‌های ۳۰ دقیقه‌ای):</label>
-                        <select id="time-select" name="time" required>
-                            <option value="">ابتدا تاریخ را انتخاب کنید</option>
-                        </select>
+                        <label>ساعت‌های در دسترس (اسلات‌های ۳۰ دقیقه‌ای):</label>
+                        <input type="hidden" id="time-input" name="time" required>
+                        <div id="slots-container" class="slots-grid">
+                            <div class="slots-empty-notice">در حال بررسی ساعت‌های آزاد...</div>
+                        </div>
+                        <div id="selected-slot-preview" class="selected-slot-preview" style="display: none;">
+                            ✓ ساعت انتخابی شما: <strong id="selected-slot-time">-</strong>
+                        </div>
                     </div>
 
                     <button type="submit" id="submit-btn" class="btn btn-primary btn-block">
