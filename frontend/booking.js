@@ -46,7 +46,7 @@ async function loadServicesDropdown() {
         });
     } catch (err) {
         console.error('Error loading services:', err);
-        selectElem.innerHTML = '<option value="">⚠️ خطا در بارگذاری خدمات</option>';
+        selectElem.innerHTML = '<option value="">⚠️ خطا در بارگذاری خدمات (عدم اتصال به سرور)</option>';
     }
 }
 
@@ -208,7 +208,11 @@ function setupFormSubmit() {
             confirmationSection.scrollIntoView({ behavior: 'smooth' });
 
         } catch (err) {
-            errorBox.textContent = `⚠️ ${err.message}`;
+            let errorMsg = err.message || 'خطای ناشناخته رخ داده است.';
+            if (err.name === 'TypeError' || errorMsg.includes('fetch') || errorMsg.includes('Failed') || errorMsg.includes('Network')) {
+                errorMsg = 'خطا در اتصال به سرور بک‌اند. لطفاً اطمینان حاصل کنید که سرور (پورت ۵۰۰۰) در حال اجرا است.';
+            }
+            errorBox.textContent = `⚠️ ${errorMsg}`;
             errorBox.style.display = 'block';
             errorBox.scrollIntoView({ behavior: 'smooth' });
         } finally {

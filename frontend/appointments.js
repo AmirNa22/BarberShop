@@ -86,7 +86,11 @@ async function fetchAppointments(date) {
         console.error('Error fetching appointments:', err);
         loadingState.style.display = 'none';
         errorState.style.display = 'block';
-        errorMessage.textContent = `⚠️ ${err.message || 'خطا در ارتباط با سرور'}`;
+        let msg = err.message || 'خطا در ارتباط با سرور';
+        if (err.name === 'TypeError' || msg.includes('fetch') || msg.includes('Failed') || msg.includes('Network')) {
+            msg = 'خطا در برقراری ارتباط با سرور بک‌اند. لطفاً از روشن بودن سرور (پورت ۵۰۰۰) اطمینان حاصل نمایید.';
+        }
+        errorMessage.textContent = `⚠️ ${msg}`;
     }
 }
 
@@ -203,7 +207,11 @@ async function handleCancelAppointment(id, btnEl) {
 
     } catch (err) {
         console.error('Error cancelling appointment:', err);
-        showAlert(`⚠️ ${err.message || 'خطا در انجام عملیات لغو'}`, 'error');
+        let msg = err.message || 'خطا در انجام عملیات لغو';
+        if (err.name === 'TypeError' || msg.includes('fetch') || msg.includes('Failed') || msg.includes('Network')) {
+            msg = 'خطا در برقراری ارتباط با سرور بک‌اند. لطفاً از روشن بودن سرور (پورت ۵۰۰۰) اطمینان حاصل نمایید.';
+        }
+        showAlert(`⚠️ ${msg}`, 'error');
         btnEl.disabled = false;
         btnEl.textContent = '✕ لغو نوبت';
     }
