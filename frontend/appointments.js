@@ -16,7 +16,6 @@ const retryBtn = document.getElementById('retry-btn');
 const totalCountEl = document.getElementById('total-count');
 const activeCountEl = document.getElementById('active-count');
 const cancelledCountEl = document.getElementById('cancelled-count');
-const clearCancelledBtn = document.getElementById('clear-cancelled-btn');
 
 /**
  * دریافت تاریخ امروز به فرمت YYYY-MM-DD با در نظر گرفتن منطقه زمانی محلی
@@ -111,11 +110,6 @@ function renderAppointments(appointments) {
     activeCountEl.textContent = toPersianDigits(activeCount);
     cancelledCountEl.textContent = toPersianDigits(cancelledCount);
 
-    // نمایش یا عدم نمایش دکمه پاکسازی گروهی در صورت وجود نوبت لغو شده
-    if (clearCancelledBtn) {
-        clearCancelledBtn.style.display = cancelledCount > 0 ? 'inline-flex' : 'none';
-    }
-
     if (appointments.length === 0) {
         emptyState.style.display = 'block';
         tableContainer.style.display = 'none';
@@ -130,18 +124,12 @@ function renderAppointments(appointments) {
             ? '<span class="badge-status badge-active">فعال</span>'
             : '<span class="badge-status badge-cancelled">لغو شده</span>';
 
-        // دکمه لغو برای نوبت‌های فعال، و دکمه حذف دائمی برای نوبت‌های لغو شده
-        let actionCell = '';
+        // دکمه لغو نوبت فقط برای نوبت‌های فعال
+        let actionCell = '<span style="color: var(--text-muted); font-size: 0.85rem;">-</span>';
         if (isActive) {
             actionCell = `
                 <button class="btn-cancel" data-id="${app.id}" data-time="${escapeHtml(app.time)}" data-name="${escapeHtml(app.name)}">
                     ✕ لغو نوبت
-                </button>
-            `;
-        } else {
-            actionCell = `
-                <button class="btn-delete" data-id="${app.id}" data-time="${escapeHtml(app.time)}" data-name="${escapeHtml(app.name)}">
-                    🗑️ حذف
                 </button>
             `;
         }
@@ -160,9 +148,8 @@ function renderAppointments(appointments) {
 
     tableContainer.style.display = 'block';
 
-    // اتصال رویداد به دکمه‌های لغو و حذف
+    // اتصال رویداد به دکمه‌های لغو
     attachCancelListeners();
-    attachDeleteListeners();
 }
 
 /**
@@ -222,97 +209,6 @@ async function handleCancelAppointment(id, btnEl) {
     }
 }
 
-/**
- * اتصال رویداد به دکمه‌های حذف دائمی نوبت
- */
-function attachDeleteListeners() {
-    const deleteButtons = appointmentsTbody.querySelectorAll('.btn-delete');
-    deleteButtons.forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-            const btnEl = e.currentTarget;
-            const id = btnEl.getAttribute('data-id');
-            const time = btnEl.getAttribute('data-time');
-            const name = btnEl.getAttribute('data-name');
-
-            // دریافت تأییدیه قبل از حذف قطعی
-            const confirmMessage = `آیا از حذف کامل این نوبت لغو شده (ساعت ${time} - ${name}) از سیستم اطمینان دارید؟\nاین رکورد برای همیشه از پایگاه‌داده پاک خواهد شد.`;
-            if (!window.confirm(confirmMessage)) {
-                return;
-            }
-
-            await handleDeleteAppointment(id, btnEl);
-        });
-    });
-}
-
-/**
- * ارسال درخواست حذف نوبت به سرور
- */
-async function handleDeleteAppointment(id, btnEl) {
-    try {
-        btnEl.disabled = true;
-        btnEl.textContent = 'در حال حذف...';
-
-        const response = await fetch(`${API_BASE_URL}/api/appointments/${id}`, {
-            method: 'DELETE'
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || 'خطا در حذف نوبت');
-        }
-
-        showAlert('🗑️ نوبت با موفقیت از سیستم پاک شد.', 'success');
-
-        // به‌روزرسانی لیست نوبت‌های همین روز
-        await fetchAppointments(datePicker.value);
-
-    } catch (err) {
-        console.error('Error deleting appointment:', err);
-        showAlert(`⚠️ ${err.message || 'خطا در انجام عملیات حذف'}`, 'error');
-        btnEl.disabled = false;
-        btnEl.textContent = '🗑️ حذف';
-    }
-}
-
-/**
- * مدیریت پاکسازی گروهی تمام نوبت‌های لغو شده روز
- */
-async function handleClearAllCancelled() {
-    const count = cancelledCountEl.textContent;
-    const confirmMessage = `آیا از حذف دائمی تمام نوبت‌های لغو شده در تاریخ ${datePicker.value} اطمینان دارید؟\nاین رکوردها به طور کامل از دیتابیس پاک خواهند شد.`;
-    
-    if (!window.confirm(confirmMessage)) {
-        return;
-    }
-
-    try {
-        clearCancelledBtn.disabled = true;
-        clearCancelledBtn.textContent = 'در حال پاکسازی...';
-
-        const response = await fetch(`${API_BASE_URL}/api/appointments/clear-cancelled?date=${encodeURIComponent(datePicker.value)}`, {
-            method: 'POST'
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || 'خطا در پاکسازی نوبت‌ها');
-        }
-
-        showAlert(`🗑️ ${data.message || 'تمام نوبت‌های لغو شده پاک شدند.'}`, 'success');
-        await fetchAppointments(datePicker.value);
-
-    } catch (err) {
-        console.error('Error clearing cancelled appointments:', err);
-        showAlert(`⚠️ ${err.message || 'خطا در عملیات پاکسازی'}`, 'error');
-    } finally {
-        clearCancelledBtn.disabled = false;
-        clearCancelledBtn.textContent = '🗑️ پاکسازی لغو‌شده‌ها';
-    }
-}
-
 // مقداردهی اولیه صفحه پس از بارگذاری کامل DOM
 document.addEventListener('DOMContentLoaded', () => {
     // تنظیم پیش‌فرض تاریخ روی امروز
@@ -321,11 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // بارگذاری نوبت‌های امروز
     fetchAppointments(today);
-
-    // دکمه پاکسازی گروهی لغو شده‌ها
-    if (clearCancelledBtn) {
-        clearCancelledBtn.addEventListener('click', handleClearAllCancelled);
-    }
 
     // تغییر تاریخ توسط کاربر
     datePicker.addEventListener('change', () => {

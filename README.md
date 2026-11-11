@@ -100,8 +100,6 @@ python -m http.server 3000
 | `POST` | `/api/appointments` | ثبت نوبت جدید با اعتبارسنجی قوانین R1 تا R3 و موبایل ایران |
 | `GET` | `/api/appointments?date=YYYY-MM-DD` | دریافت لیست نوبت‌های یک روز مشخص به ترتیب ساعت |
 | `POST` | `/api/appointments/<id>/cancel` | لغو نوبت و آزادسازی بازه زمانی طبق قانون R4 |
-| `DELETE` | `/api/appointments/<id>` | حذف دائمی و پاکسازی نوبت از دیتابیس (ویژه صاحب‌کار) |
-| `POST` | `/api/appointments/clear-cancelled?date=YYYY-MM-DD` | پاکسازی یک‌جای تمام نوبت‌های لغو شده در یک تاریخ مشخص |
 
 ---
 

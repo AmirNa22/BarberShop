@@ -803,34 +803,6 @@ body {
     cursor: not-allowed;
 }
 
-.btn-delete {
-    padding: 6px 12px;
-    font-size: 0.82rem;
-    border-radius: 8px;
-    border: 1px solid rgba(239, 68, 68, 0.35);
-    background: rgba(239, 68, 68, 0.08);
-    color: #fca5a5;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: inherit;
-    font-weight: 600;
-}
-
-.btn-delete:hover {
-    background: #dc2626;
-    color: #ffffff;
-    border-color: #dc2626;
-    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.45);
-}
-
-.btn-delete:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
 /* فوتر یکپارچه */
 .footer {
     padding: 18px;
