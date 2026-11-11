@@ -1,0 +1,28 @@
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+backend/__pycache__/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# SQLite Database
+*.db
+*.sqlite
+*.sqlite3
+backend/barbershop.db
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo
